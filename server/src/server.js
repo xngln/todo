@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+let mongoose = require('mongoose');
 
 mongoose.Promise = global.Promise;
 mongoose.connect('mongodb://localhost:27017/TodoApp', { useNewUrlParser: true });
@@ -6,17 +6,18 @@ mongoose.connect('mongodb://localhost:27017/TodoApp', { useNewUrlParser: true })
 let Todo = mongoose.model('Todo', {
   text: {
     type: String,
+    required: true,
+    minlength: 1,
+    trim: true,
   },
   completed: {
     type: Boolean,
+    default: false,
   },
   completedAt: {
     type: Number,
+    default: null,
   },
-});
-
-let newTodo = new Todo({
-  text: 'cook dinner',
 });
 
 let todo2 = new Todo({
@@ -25,13 +26,29 @@ let todo2 = new Todo({
   completedAt: null,
 })
 
-// newTodo.save().then((res) => {
+// todo2.save().then((res) => {
 //   console.log(res);
 // }, (err) => {
 //   console.log(err);
 // });
 
-todo2.save().then((res) => {
+
+// User model
+
+let User = mongoose.model('User', {
+  email: {
+    type: String,
+    required: true,
+    trim: true,
+    minlength: 1,
+  }
+})
+
+let user1 = new User({
+  email: 'davxliu@gmail.com',
+})
+
+user1.save().then((res) => {
   console.log(res);
 }, (err) => {
   console.log(err);
