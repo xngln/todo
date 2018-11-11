@@ -1,31 +1,24 @@
 <template>
-  <div id="app">
-    <img src="@/assets/logo.png">
-    <div class="homepage">
-      <h1>This is the home page</h1>
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiu ali...</p>
-    </div>
+  <div class="home">
+    <app-header></app-header>
+    <p>Simple and minimalist todo app to help you keep track of your tasks.</p>
+    <router-link to="/login">Login</router-link> to get started!
   </div>
 </template>
 
 <script>
+import AppHeader from '@/components/AppHeader';
 export default {
   name: 'Homepage',
+  components: {
+   AppHeader,
+  }
 };
 </script>
 
 <style lang="scss" scoped>
-#app {
-  font-family: 'Roboto', Helvetica, Arial, sans-serif;
-  font-weight: lighter;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.home {
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-
-  h1 {
-    font-weight: lighter;
-  }
 }
+
 </style>

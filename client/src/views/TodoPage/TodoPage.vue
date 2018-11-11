@@ -1,5 +1,5 @@
 <template>
-  <div id="secure">
+  <div class="todos">
     <h1>Secure Area</h1>
     <p>
         This is a secure area
@@ -17,7 +17,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-#secure {
+.todos {
   background-color: #ffffff;
   border: 1px solid #cccccc;
   padding: 20px;
