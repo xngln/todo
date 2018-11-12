@@ -8,7 +8,7 @@ const todos = [{
   text: "first test todo",
 }, {
   text: "second test todo",
-}]
+}];
 
 beforeEach((done) => {
   Todo.remove({}).then(() => {
