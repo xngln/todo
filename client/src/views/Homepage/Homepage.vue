@@ -8,11 +8,12 @@
 
 <script>
 import AppHeader from '@/components/AppHeader';
+
 export default {
   name: 'Homepage',
   components: {
-   AppHeader,
-  }
+    AppHeader,
+  },
 };
 </script>
 
