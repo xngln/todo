@@ -8,11 +8,46 @@ const { mongoose } = require('../db/mongoose');
 const { Todo } = require('../models/todo');
 const { User } = require('../models/user');
 const { authenticate } = require('../middleware/authenticate');
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
 
 let app = express();
 const port = process.env.PORT;
+let sessionOptions = {
+  secret: process.env.JWT_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { sameSite: true, },
+  store: new MongoStore({
+    mongooseConnection: mongoose.connection,
+    ttl: 7 * 24 * 60 * 60,
+    touchAfter: 24 * 3600,
+  }),
+};
 
+if (process.env.NODE_ENV === 'production') {
+  sessionOptions.cookie.secure = true;
+}
+
+let allowCrossDomain = function (req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Credentials', 'true');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-auth');
+  res.header('Access-Control-Expose-Headers', 'x-auth');
+
+  // intercept OPTIONS method
+  if ('OPTIONS' == req.method) {
+    res.send(200);
+  }
+  else {
+    next();
+  }
+};
+
+app.use(allowCrossDomain);
 app.use(bodyParser.json());
+app.use(session(sessionOptions));
 
 
 // *****  TODOS ROUTES  *****
@@ -130,7 +165,8 @@ app.post('/users/login', (req, res) => {
 
   User.findByCredentials(body.email, body.password).then((user) => {
    return user.generateAuthToken().then((token) => {
-      res.header('x-auth', token).send(user);  
+      req.session.token = token;
+      req.session.user = user;
     })
   }).catch((err) => {
     res.status(400).send();
