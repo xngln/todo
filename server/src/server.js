@@ -150,7 +150,8 @@ app.post('/users', (req, res) => {
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
-    res.header('x-auth', token).send(user);
+    req.session.token = token;
+    req.session.user = user;
   }).catch((err) => {
     res.status(400).send(err);
   });
