@@ -12,6 +12,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 let app = express();
+let domain = 'http://localhost:8080';
 const port = process.env.PORT;
 let sessionOptions = {
   secret: process.env.JWT_SECRET,
@@ -27,14 +28,14 @@ let sessionOptions = {
 
 if (process.env.NODE_ENV === 'production') {
   sessionOptions.cookie.secure = true;
+  domain = 'https://todoboi.netlify.com';
 }
 
 let allowCrossDomain = function (req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Origin', domain);
   res.header('Access-Control-Allow-Credentials', 'true');
   res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization, Content-Length, X-Requested-With, x-auth');
-  res.header('Access-Control-Expose-Headers', 'x-auth');
 
   // intercept OPTIONS method
   if ('OPTIONS' == req.method) {
@@ -143,15 +144,15 @@ app.patch('/todos/:id', authenticate, (req, res) => {
 
 // *****  USERS ROUTES  *****
 app.post('/users', (req, res) => {
-  let body = _.pick(req.body, ['email', 'password']);
+  let body = _.pick(req.body, ['firstName', 'lastName', 'email', 'password']);
   let user = new User(body);
-  let userObject = user.toObject();
 
   user.save().then(() => {
     return user.generateAuthToken();
   }).then((token) => {
     req.session.token = token;
     req.session.user = user;
+    res.send(user);
   }).catch((err) => {
     res.status(400).send(err);
   });
@@ -168,6 +169,7 @@ app.post('/users/login', (req, res) => {
    return user.generateAuthToken().then((token) => {
       req.session.token = token;
       req.session.user = user;
+     res.send(user);
     })
   }).catch((err) => {
     res.status(400).send();
@@ -175,10 +177,12 @@ app.post('/users/login', (req, res) => {
 });
 
 app.delete('/users/me/token', authenticate, (req, res) => {
-  req.user.removeToken(req.token).then(() => {
-    res.status(200).send();
-  }, () => {
-    res.status(400).send();
+  req.session.destroy(() => {
+    req.user.removeToken(req.token).then(() => {
+      res.status(200).send();
+    }, () => {
+      res.status(400).send();
+    });
   });
 });
 

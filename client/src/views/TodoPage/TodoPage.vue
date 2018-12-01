@@ -4,14 +4,37 @@
     <p>
         This is a secure area
     </p>
+
+    <form @submit.prevent="logout">
+      <div class="button-control control">
+        <button class="button" type="submit">Log out</button>
+      </div>
+    </form>
   </div>
 </template>
 
 <script>
+import { userApi } from '@/services/appApi';
+
 export default {
   name: 'Secure',
   data() {
     return {};
+  },
+  methods: {
+    async logout() {
+      // let response;
+      // response = await userApi.logoutUser();
+      userApi.logoutUser().then((response) => {
+        console.log(response);
+      }).catch((response) => {
+        console.log(response);
+      });
+      // console.log(response);
+      // if (response.status === 200) {
+      //   this.$router.replace({ name: "Login" });
+      // }
+    },
   },
 };
 </script>

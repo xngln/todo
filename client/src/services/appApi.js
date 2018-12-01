@@ -8,35 +8,28 @@ if (!process.env.NODE_ENV || process.env.NODE_ENV === 'development') {
   baseURL = 'https://todo-boi.herokuapp.com/';
 }
 
-const Api = (token) => {
-  if (typeof token !== 'undefined') {
-    return axios.create({ baseURL, headers: { 'x-auth': token, Origin: 'http://localhost:8080' } });
-  }
-
-  return axios.create({ baseURL });
-};
-
+const Api = () => axios.create({ baseURL });
 
 // Todo endpoints
-const fetchAllTodos = (token) => { Api(token).get('todos'); };
+const fetchAllTodos = () => Api().get('todos');
 
-const fetchTodoById = (token, id) => { Api(token).get(`todos/${id}`); };
+const fetchTodoById = id => Api().get(`todos/${id}`);
 
-const postTodos = (token, text) => { Api(token).post('todos', { text }); };
+const postTodos = text => Api().post('todos', { text });
 
-const updateTodos = (token, id, text, completed) => { Api(token).patch(`todos/${id}`, { text, completed }); };
+const updateTodos = (id, text, completed) => Api().patch(`todos/${id}`, { text, completed });
 
-const deleteTodo = (token, id) => { Api(token).patch(`todos/${id}`); };
+const deleteTodo = id => Api().patch(`todos/${id}`);
 
 
 // User endpoints
-const fetchUser = (token) => { Api(token).get('users/me'); };
+const fetchUser = () => Api().get('users/me');
 
-const createUser = (token) => { Api(token).get('users'); };
+const createUser = (firstName, lastName, email, password) => Api().post('users', { firstName, lastName, email, password });
 
-const loginUser = (email, password) => Api().post('users/login', { email, password });
+const loginUser = (email, password) => Api().post('users/login', { email, password }, { withCredentials: true });
 
-const logoutUser = (token) => { Api(token).delete('users/me/token'); };
+const logoutUser = () => Api().delete('users/me/token');
 
 export const todoApi = {
   fetchAllTodos,
