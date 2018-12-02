@@ -23,17 +23,11 @@ export default {
   },
   methods: {
     async logout() {
-      // let response;
-      // response = await userApi.logoutUser();
-      userApi.logoutUser().then((response) => {
-        console.log(response);
-      }).catch((response) => {
-        console.log(response);
-      });
-      // console.log(response);
-      // if (response.status === 200) {
-      //   this.$router.replace({ name: "Login" });
-      // }
+      let response = await userApi.logoutUser();
+      console.log(response);
+      if (response.status === 200) {
+        this.$router.replace({ name: "Login" });
+      }
     },
   },
 };

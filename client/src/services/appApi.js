@@ -29,7 +29,7 @@ const createUser = (firstName, lastName, email, password) => Api().post('users',
 
 const loginUser = (email, password) => Api().post('users/login', { email, password }, { withCredentials: true });
 
-const logoutUser = () => Api().delete('users/me/token');
+const logoutUser = () => Api().delete('users/me/token', { withCredentials: true });
 
 export const todoApi = {
   fetchAllTodos,

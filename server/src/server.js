@@ -18,7 +18,7 @@ let sessionOptions = {
   secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { sameSite: true, },
+  cookie: { sameSite: false, secure: false, httpOnly: false },
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     ttl: 7 * 24 * 60 * 60,
