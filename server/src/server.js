@@ -18,7 +18,7 @@ let sessionOptions = {
   secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { sameSite: false, secure: false, httpOnly: false },
+  cookie: { sameSite: true, },
   store: new MongoStore({
     mongooseConnection: mongoose.connection,
     ttl: 7 * 24 * 60 * 60,
@@ -27,7 +27,7 @@ let sessionOptions = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  // sessionOptions.cookie.secure = true;
+  sessionOptions.cookie.secure = true;
   domain = 'https://todoboi.netlify.com';
 }
 
