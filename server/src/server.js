@@ -12,6 +12,7 @@ const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
 
 let app = express();
+app.enable('trust proxy');
 let domain = 'http://localhost:8080';
 const port = process.env.PORT;
 let sessionOptions = {
