@@ -1,2 +1,2 @@
 /*
-  set-cookie
+  X-Frame-Options = "DENY"
