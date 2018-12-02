@@ -19,6 +19,7 @@ let sessionOptions = {
   proxy: true,
   secret: process.env.JWT_SECRET,
   resave: false,
+  key: 'sid',
   saveUninitialized: false,
   cookie: { sameSite: true, },
   store: new MongoStore({
