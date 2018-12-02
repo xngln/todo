@@ -16,6 +16,7 @@ app.enable('trust proxy');
 let domain = 'http://localhost:8080';
 const port = process.env.PORT;
 let sessionOptions = {
+  proxy: true,
   secret: process.env.JWT_SECRET,
   resave: false,
   saveUninitialized: false,
