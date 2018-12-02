@@ -27,7 +27,7 @@ let sessionOptions = {
 };
 
 if (process.env.NODE_ENV === 'production') {
-  sessionOptions.cookie.secure = true;
+  // sessionOptions.cookie.secure = true;
   domain = 'https://todoboi.netlify.com';
 }
 
